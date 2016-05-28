@@ -38,7 +38,7 @@ namespace AnimetickNotificator
                     if (anime.Item2.Day == now.Day && anime.Item2.Hour == now.Hour && anime.Item2.Minute == now.Minute)
                     {
                         ToastNotification($"[Animetick Notificator]\n" +
-                                          $"{anime.Item2.Hour}から{anime.Item2.Minute + 1}\t{anime.Item1}が始まります");
+                                          $"{anime.Item2.Hour}:{anime.Item2.Minute + 1}から {anime.Item1} が始まります");
                     }
                 }
 
