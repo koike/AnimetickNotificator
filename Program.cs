@@ -51,9 +51,12 @@ namespace AnimetickNotificator
             }
         }
 
+        /// <summary>
+        /// トースト通知
+        /// </summary>
+        /// <param name="text">通知する文字列</param>
         private static void ToastNotification(string text)
         {
-            //コマンドライン引数をトースト通知として表示します
             var code = new string[]
             {
             "$ErrorActionPreference = \"Stop\"",
@@ -87,13 +90,17 @@ namespace AnimetickNotificator
         {
             var json = JsonConvert.DeserializeObject<RootObject>(GetJson(URL));
             var today = DateTime.Now.Date.ToString().Split(' ')[0].Replace('/', '-');
+            var tomorrow = DateTime.Now.AddDays(1).Date.ToString().Split(' ')[0].Replace('/', '-');
             var data = new List<Tuple<string, DateTime>>();
             foreach (var list in json.list)
             {
                 if (list.start_at.StartsWith(today))
                 {
-                    // アニメ放送のt分前の時刻にする
                     data.Add(new Tuple<string, DateTime>(list.title, DateTime.ParseExact(list.start_at.Replace(today + "T", "").Replace("+09:00", ""), "HH:mm:ss", null).AddMinutes((-1) * t)));
+                }
+                if (list.start_at.StartsWith(tomorrow + "T00:00"))
+                {
+                    data.Add(new Tuple<string, DateTime>(list.title, DateTime.ParseExact(list.start_at.Replace(tomorrow + "T", "").Replace("+09:00", ""), "HH:mm:ss", null).AddMinutes((-1) * t)));
                 }
             }
             return data;
